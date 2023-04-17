@@ -12,6 +12,18 @@ def remove_usernames_links(tweet):
     return tweet
 
 
+def data_scraper(account):
+    end_time = date.today()
+    start_time = str(end_time.year-5)+'-'+str(end_time.month)+'-'+str(end_time.day)
+    tweets = []
+    query = 'from:' + account + ' since:'+ start_time +' until:' + str(end_time)
+    for i,tweet in enumerate(sntwitter.TwitterSearchScraper(query).get_items()):
+        if i>1000000:
+            break
+        tweets.append([tweet.date,  tweet.conversationId, tweet.rawContent, tweet.user.username])
+    tweets_Dataframe = pd.DataFrame(tweets, columns=['Datetime', 'conversation Id' ,'Text', 'Username'])
+    return tweets_Dataframe
+
 def data_maker(data0):
     data0.index = range(data0.shape[0])
     
